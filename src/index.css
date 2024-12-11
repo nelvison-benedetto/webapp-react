@@ -1,0 +1,7 @@
+*{margin:0; padding: 0; box-sizing: border-box;}
+img{max-width: 100%;}
+#debug *{border: 1px dashed black;}
+
+:root {
+  font-family: Helvetica, Inter, system-ui, Avenir, Arial, sans-serif;
+}
