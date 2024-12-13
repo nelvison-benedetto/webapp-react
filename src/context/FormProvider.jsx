@@ -11,6 +11,7 @@ export default function FormProvider({children}){
         e.preventDefault();
         setSearchedBook(e.target.value);
     }
+    useEffect(()=>{fetchData()},[]);
     useEffect(()=>{
         const searchedBook_url = searchedBook.toLowerCase().replace(/\s+/g, '+');  //transforms one or more spaces into a single'+'
         setSearchedBookUrl(searchedBook_url);
@@ -21,13 +22,25 @@ export default function FormProvider({children}){
     },[searchedBookUrl]);
 
     function fetchData(){
-        
+        const url = 'http://localhost:3001/something';
+        fetch(url)
+            .then(res=>res.json())
+            .then(response=>{
+                setFilteredBook(response.results);
+                console.log("fetching data");
+            })
+            .catch(error=>{console.error("error fetching data:", error);})
+        console.log(filteredBook);
     }
 
 
     return(
         <FormContext.Provider
-          value={{}}
+          value={{
+            searchedBook, setSearchedBook,
+            searchedBookUrl, setSearchedBookUrl,
+            filteredBook, setFilteredBook
+          }}
         >
           {children}
         </FormContext.Provider>
