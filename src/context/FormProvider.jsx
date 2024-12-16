@@ -19,6 +19,7 @@ export default function FormProvider({children}){
     useEffect(()=>{
         const searchedBook_url = searchedBook.toLowerCase().replace(/\s+/g, '+');  //transforms one or more spaces into a single'+'
         setSearchedBookUrl(searchedBook_url);
+        console.log(searchedBookUrl);
     },[searchedBook]); //run each time searchedBook is modified
     useEffect(()=>{
         if(!searchedBookUrl) return;
@@ -38,7 +39,7 @@ export default function FormProvider({children}){
     return(
         <FormContext.Provider
           value={{
-            searchedBook, setSearchedBook,
+            searchedBook, setSearchedBook, handleSearchForm,
             searchedBookUrl, setSearchedBookUrl,
             filteredBook, setFilteredBook
           }}

@@ -1,2 +1,8 @@
 @import './index.css';
 
+:root{
+    --brow1: rgb(133, 65, 65);
+    --gold1: rgb(255, 215, 0);
+}
+.c-brown1{background-color: var(--brow1);}
+.text-gold1{color: var(--gold1);}
