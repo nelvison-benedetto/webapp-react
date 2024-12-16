@@ -7,11 +7,15 @@ export default function FormProvider({children}){
     const [searchedBookUrl, setSearchedBookUrl] = useState('');
     const [filteredBook, setFilteredBook] = useState([]);
 
+    const REACT_HOST = import.meta.env.VITE_REACT_HOST;
+    const REACT_PORT = import.meta.env.VITE_REACT_PORT;
+    const url_base = `${REACT_HOST}:${REACT_PORT}`;
+
     function handleSearchForm(e){
         e.preventDefault();
         setSearchedBook(e.target.value);
     }
-    useEffect(()=>{fetchData()},[]);
+    useEffect(()=>{fetchData()},[]);  //run at the start 
     useEffect(()=>{
         const searchedBook_url = searchedBook.toLowerCase().replace(/\s+/g, '+');  //transforms one or more spaces into a single'+'
         setSearchedBookUrl(searchedBook_url);
@@ -22,17 +26,14 @@ export default function FormProvider({children}){
     },[searchedBookUrl]);
 
     function fetchData(){
-        const url = 'http://localhost:3001/something';
+        const url = `${url_base}/book`;
         fetch(url)
             .then(res=>res.json())
             .then(response=>{
-                setFilteredBook(response.results);
-                console.log("fetching data");
+                setFilteredBook(response.data);  //response.data NON INVECE response.result!!
             })
             .catch(error=>{console.error("error fetching data:", error);})
-        console.log(filteredBook);
     }
-
 
     return(
         <FormContext.Provider
