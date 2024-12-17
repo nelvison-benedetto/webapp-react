@@ -9,6 +9,7 @@ export default function FormProvider({children}){
     const [filteredBook, setFilteredBook] = useState([]);
 
     const [filteredReview, setFilteredReview] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const REACT_HOST = import.meta.env.VITE_REACT_HOST;
     const REACT_PORT = import.meta.env.VITE_REACT_PORT;
@@ -39,16 +40,17 @@ export default function FormProvider({children}){
 
     function fetchData(){
         const url = `${url_base}/book`;
+        setLoading(true);
         fetch(url)
             .then(res=>res.json())
             .then(response=>{
                 setBooks(response.data);  //response.data NON INVECE response.result!!
             })
             .catch(error=>{console.error("error fetching data:", error);})
+            .finally(() => {
+                setLoading(false);  //loading deactivated when fetch is finished
+            });
     }
-
-
-
 
 
     return(
@@ -57,7 +59,8 @@ export default function FormProvider({children}){
             books, setBooks,
             searchedBook, setSearchedBook, handleSearchForm,
             searchedBookUrl, setSearchedBookUrl,
-            filteredBook, setFilteredBook
+            filteredBook, setFilteredBook,
+            loading, setLoading
           }}
         >
           {children}

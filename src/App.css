@@ -6,3 +6,10 @@
 }
 .c-brown1{background-color: var(--brow1);}
 .text-gold1{color: var(--gold1);}
+
+.loader{
+    min-height: calc(100vh - 350px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -8,7 +8,7 @@ export default function Layout(){
     return (
         <>
           <AppHeader/>
-          <main id="debug">
+          <main id="">
             <Outlet/> {/*load the page here depending on the url*/}
           </main>
           <AppFooter/>
