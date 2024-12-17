@@ -6,6 +6,7 @@ import FormProvider from './context/FormProvider'
 import NotFoundPage from './pages/NotFoundPage'
 import Layout from './pages/Layout'
 import HomePage from './pages/HomePage'
+import SingleBookPage from './pages/SingleBookPage'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route element={<Layout/>}>
             <Route path='/' element={<HomePage/>}/>
+            <Route path='/book/:id' element={<SingleBookPage/>}/>
             <Route path='*' element={<NotFoundPage/>}/> 
           </Route>
         </Routes>
