@@ -1,6 +1,8 @@
+//pages/SingleBookPage.jsx
 import { useParams , useNavigate} from "react-router-dom"; //useParams x get params from url, useNavigate x 
 import { useEffect, useState } from "react";
 import ReviewCard from "../components/ReviewCard";
+import ReviewFormCard from "../components/ReviewFormCard";
 
 export default function SingleBookPage(){
     const navigate = useNavigate();
@@ -8,6 +10,7 @@ export default function SingleBookPage(){
     const [book, setBook] = useState(null);
     const url = `http://localhost:3001/book/${id}`;
     
+    //FETCH BOOK
     useEffect(()=>{
         fetch(url)
             .then(res=>res.json())
@@ -19,18 +22,22 @@ export default function SingleBookPage(){
                 else{setBook(response.data);}
             })
             .catch(err=>{console.log(err);})
-    },[url]);
+    },[url]);  //x security
 
+    //FETCH REVIEWS
     const [reviews, setReviews] = useState([]);
     const url_getreviews= `http://localhost:3001/review/${id}`;  //id of the book
-    useEffect(()=>{
+    const fetchReviews= ()=>{
       fetch(url_getreviews)
         .then(res=>res.json())
         .then(response=>{
           setReviews(response.data);
         })
         .catch(err=>{console.log(err)})
-    });
+    }
+    useEffect(()=>{
+      fetchReviews();
+    },[id]);
 
     return(
       <>
@@ -43,7 +50,7 @@ export default function SingleBookPage(){
                   <div className="col">
                     <div className="card border-0 rounded-4 shadow-lg">
                       <img className="card-img-top rounded-4" 
-                          src={book.cover_image ? `http://localhost:3001/${book.cover_image}` : '/path/to/default/image.jpg'} 
+                          src={book.cover_image ? `http://localhost:3001/${book.cover_image}` : '/pathdefaultimage/xx.jpg'} 
                           alt={book.title || 'book cover'} />
                     </div>
                   </div>
@@ -61,6 +68,11 @@ export default function SingleBookPage(){
             </section>
           ) : (<div>Loading book details...</div>)
           }
+          <section>
+            <div className="container">
+              <ReviewFormCard book_id={id} onSuccess={() => fetchReviews()}/> 
+            </div>
+          </section>
           <section className='reviews'>
             <div className="container">
               {
