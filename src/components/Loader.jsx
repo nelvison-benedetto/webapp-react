@@ -5,7 +5,7 @@ export default function Loader(){
 
     return (
         <>
-          <div className='loader' aria-live="polite">  //aria-live x people screen readers
+          <div className='loader' aria-live="polite">  {/* aria-live x people screen readers */}
             <l-ring size='60' color="coral"></l-ring>
           </div>
         </>

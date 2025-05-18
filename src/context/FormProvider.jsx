@@ -21,15 +21,17 @@ export default function FormProvider({children}){
     }
     useEffect(()=>{fetchData()},[]);  //initial fetch to set books
 
+
     useEffect(()=>{
         const searchedBook_url = searchedBook.toLowerCase().replace(/\s+/g, '+');  //transforms one or more spaces into a single'+'
         setSearchedBookUrl(searchedBook_url);
     },[searchedBook]); //run each time searchedBook is modified
     useEffect(()=>{
         if(!searchedBookUrl) return;
-        console.log(searchedBookUrl);  //ok non rimane 1character indietro!
+        //console.log(searchedBookUrl);  //ok non rimane 1character indietro!
         fetchData();
     },[searchedBookUrl]);
+
 
     useEffect(()=>{
         const newFilteredBook = books.filter((item,index)=> item.title.toLowerCase().replace(/\s+/g,'+').includes(searchedBook.toLowerCase().replace(/\s+/g,'+')));
@@ -38,8 +40,9 @@ export default function FormProvider({children}){
       }, [books, searchedBook]  //executed each time mangas or searchText change
       );
 
+      
     function fetchData(){
-        const url = `${url_base}/book`;
+        const url = `${url_base}/books`;
         setLoading(true);
         fetch(url)
             .then(res=>res.json())

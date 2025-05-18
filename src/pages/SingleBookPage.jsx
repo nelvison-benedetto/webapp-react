@@ -10,10 +10,13 @@ export default function SingleBookPage(){
     const navigate = useNavigate();
     const {id} = useParams();   //get the id when you insert in url ...book/2 get 2
     const [book, setBook] = useState(null);
-    const url = `http://localhost:3001/book/${id}`;
+    const [reviews, setReviews] = useState([]);
     const {loading, setLoading} = useContext(FormContext);
 
-    //FETCH BOOK
+    function debugBook(){console.log(book);}
+
+    //FETCH SINGLE BOOK
+    const url = `http://localhost:3001/books/${id}`;
     useEffect(()=>{
         setLoading(true);
         fetch(url)
@@ -23,7 +26,9 @@ export default function SingleBookPage(){
                 if(keys.includes('error')) {
                     navigate('*'); //se c'è un errore reindirizza alla pagina 404
                 }
-                else{setBook(response.data);}
+                else{
+                  setBook(response.data);
+                }
             })
             .catch(err=>{console.log(err);})
             .finally(() => {
@@ -31,9 +36,8 @@ export default function SingleBookPage(){
           });
     },[url]);  //x security
 
-    //FETCH REVIEWS
-    const [reviews, setReviews] = useState([]);
-    const url_getreviews= `http://localhost:3001/review/${id}`;  //id of the book
+    //FETCH BOOK REVIEWS
+    const url_getreviews= `http://localhost:3001/reviews/${id}`;  //id of the book
     const fetchReviews= ()=>{
       setLoading(true);
       fetch(url_getreviews)
@@ -50,51 +54,73 @@ export default function SingleBookPage(){
       fetchReviews();
     },[id]);
 
-    return(
+    return (
       <>
-        {loading ? <Loader/> : (
-        <>
-            <h1>Book id: {id}</h1>
-            {
-            book? (
-              <section className="book_details">
-                <div className="container">
-                  <div className="row">
-                    <div className="col">
-                      <div className="card border-0 rounded-4 shadow-lg">
-                        <img className="card-img-top rounded-4" 
-                            src={book.cover_image ? `http://localhost:3001/${book.cover_image}` : '/pathdefaultimage/xx.jpg'} 
-                            alt={book.title || 'book cover'} />
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <div className="container mt-5">
+
+              <button type='button' onClick={debugBook}>Check Debug Books</button>
+
+              {book ? (
+                <div className="row align-items-center g-4">
+                  
+                  {book.cover_image && (
+                    <div className="col-md-4">
+                      <div className="card shadow border-0 rounded-4">
+                        <img
+                          src={
+                            book.cover_image
+                              ? `http://localhost:3001/${book.cover_image}`
+                              : "/default_cover.jpg"
+                          }
+                          className="img-fluid rounded-4"
+                          alt={book.title}
+                        />
                       </div>
                     </div>
-                    <div className="col">
-                      <h3>{book.title}</h3>
-                      <h3>{book.author}</h3>
-                      <div>
-                        <p>
-                          {book.description}
-                        </p>
-                      </div>
-                    </div>
+                  )}
+
+                  <div className={book.cover_image ? "col-md-8" : "col-md-12"}>
+                    <h1 className="display-5 fw-bold">{book.title}</h1>
+                    <h4 className="text-muted mb-3">by {book.author}</h4>
+                    <p className="lead">{book.description}</p>
+                    <p className="text-secondary">
+                      <strong>Genre:</strong> {book.genre || "N/A"}
+                      <br />
+                      <strong>Published:</strong> {book.publication_year}
+                    </p>
                   </div>
                 </div>
+              ) : (
+                <div>Loading book details...</div>
+              )}
+
+              <hr className="my-5" />
+
+              <section className="mb-5">
+                {/* <h3 className="mb-4">Add a Review</h3> */}
+                <ReviewFormCard book_id={id} onSuccess={fetchReviews} />
               </section>
-            ) : (<div>Loading book details...</div>)
-            }
-            <section>
-              <div className="container">
-                <ReviewFormCard book_id={id} onSuccess={() => fetchReviews()}/> 
-              </div>
-            </section>
-            <section className='reviews'>
-              <div className="container">
-                {
-                  reviews[0]?
-                    reviews.map((item,index)=><ReviewCard key={item.id} data={item}/> ) : (<div>No reviews found</div>)
-                }
-              </div>
-            </section>
-        </>
+
+              <section className="mb-5">
+                <h3 className="mb-4">User Reviews</h3>
+                <div className="row g-4">
+                  {reviews.length > 0 ? (
+                    reviews.map((item) => (
+                      <ReviewCard key={item.id} data={item} />
+                    ))
+                  ) : (
+                    <div className="text-muted">
+                      No reviews yet for this book.
+                    </div>
+                  )}
+                </div>
+              </section>
+            </div>
+          </>
         )}
       </>
     );
