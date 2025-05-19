@@ -2,7 +2,7 @@
 
 🔗 𝐁𝐚𝐜𝐤-𝐞𝐧𝐝: https://github.com/nelvison-benedetto/webapp-express
 
-Project developed using React.js to create a dynamic, responsive, and user-friendly interface for managing books and user reviews. This frontend interacts seamlessly with a RESTful API backend (built with Node.js, Express, and MySQL), providing full CRUD capabilities for both books and associated reviews.  
+Project developed using React.js to create a dynamic, responsive, and user-friendly interface for managing books and user reviews. This frontend interacts seamlessly with a RESTful API backend (built with Node.js, Express, and MySQL), providing full CRUD capabilities for both books and associated reviews.
 
 ---
 ### Key features include:
