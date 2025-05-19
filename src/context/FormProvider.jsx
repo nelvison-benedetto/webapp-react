@@ -63,7 +63,8 @@ export default function FormProvider({children}){
             searchedBook, setSearchedBook, handleSearchForm,
             searchedBookUrl, setSearchedBookUrl,
             filteredBook, setFilteredBook,
-            loading, setLoading
+            loading, setLoading,
+            fetchData
           }}
         >
           {children}

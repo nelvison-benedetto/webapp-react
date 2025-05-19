@@ -11,9 +11,37 @@ export default function SingleBookPage(){
     const {id} = useParams();   //get the id when you insert in url ...book/2 get 2
     const [book, setBook] = useState(null);
     const [reviews, setReviews] = useState([]);
-    const {loading, setLoading} = useContext(FormContext);
+    const {loading, setLoading, fetchData} = useContext(FormContext);
 
     function debugBook(){console.log(book);}
+
+    const handleDeleteBook = () => {
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this book?"
+      );
+      if (!confirmDelete) return;
+      setLoading(true);
+      fetch(`http://localhost:3001/books/${id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          if (response.message) {
+            alert("Book deleted successfully.");
+            fetchData(); // 🔄 forza il refresh dei dati nel context
+            navigate("/"); // ⬅️ poi torna alla HomePage
+          } else {
+            alert("Error deleting book.");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("An error occurred while deleting the book.");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
 
     //FETCH SINGLE BOOK
     const url = `http://localhost:3001/books/${id}`;
@@ -62,10 +90,10 @@ export default function SingleBookPage(){
           <>
             <div className="container mt-5">
 
-              <button type='button' onClick={debugBook}>Check Debug Books</button>
+              {/* <button type='button' onClick={debugBook}>Check Debug Books</button> */}
 
               {book ? (
-                <div className="row align-items-center g-4">
+                <div className="row align-items-start g-4">
                   
                   {book.cover_image && (
                     <div className="col-md-4">
@@ -83,8 +111,13 @@ export default function SingleBookPage(){
                     </div>
                   )}
 
-                  <div className={book.cover_image ? "col-md-8" : "col-md-12"}>
-                    <h1 className="display-5 fw-bold">{book.title}</h1>
+                  <div className={`${book.cover_image ? "col-md-8" : "col-md-12"}  `}>
+                    
+                    <div className="d-flex justify-content-between align-items-center">
+                      <h1 className="display-5 fw-bold">{book.title}</h1>
+                      <button className="btn btn-danger" onClick={handleDeleteBook}>Delete Book</button>
+                    </div>
+
                     <h4 className="text-muted mb-3">by {book.author}</h4>
                     <p className="lead">{book.description}</p>
                     <p className="text-secondary">
